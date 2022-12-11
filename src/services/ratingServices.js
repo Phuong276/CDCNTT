@@ -23,6 +23,22 @@ let getAllRatingByIdTeacher = (id_Teacher) => {
     })
 }
 
+let createNewRating = async (data) => {
+    try {
+        let ratring = ''
+        ratring = await db.Rating.create( {
+            id_Teacher: data.id_Teacher,
+            id_Student: data.id_Student,
+            comment: data.comment,
+            rating: data.rating,
+        })
+        resolve(ratring)
+    } catch(e) {
+        reject(e)
+    }
+}
+
 module.exports = {
     getAllRatingByIdTeacher: getAllRatingByIdTeacher,
+    createNewRating: createNewRating
 }
