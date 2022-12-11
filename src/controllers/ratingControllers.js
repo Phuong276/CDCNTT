@@ -27,7 +27,17 @@ let handleGetAllRatingByIdTeacher = async (req, res) => {
     })
 }
 
+let handleCreateNewRating = async (req, res) => {
+    let rating = await ratingServices.createNewRating(req.body)
+    return res.status(200).json( {
+        errCode: 0,
+        errMessage: 'Ok',
+        rating
+    })
+}
+
 module.exports = {
     handleGetAllRatingByIdTeacher: handleGetAllRatingByIdTeacher,
-    getHomePage: getHomePage
+    getHomePage: getHomePage,
+    handleCreateNewRating: handleCreateNewRating
 }
