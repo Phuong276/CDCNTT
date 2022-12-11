@@ -19,7 +19,7 @@ let createNewTeacher = async (data) => {
     try {
         let teacher = ''
         let hashPasswordFromBcrypt = await hashUserPassword(data.password)
-        teacher = await db.KhachHang.create( {
+        teacher = await db.Teacher.create( {
             username: data.username,
             password: hashPasswordFromBcrypt,
             firstName: data.firstName,
@@ -58,7 +58,7 @@ let createNewStudent = async (data) => {
     try {
         let student = ''
         let hashPasswordFromBcrypt = await hashUserPassword(data.password)
-        student = await db.KhachHang.create( {
+        student = await db.Student.create( {
             username: data.username,
             password: hashPasswordFromBcrypt,
             firstName: data.firstName,
@@ -88,9 +88,97 @@ let checkUsernameStudent = (username) => {
     })
 }
 
+let checkLoginTeacher = (username, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let userData = {}
+            let isExit = await checkUsernameTeacher(username)
+            if(isExit) {
+                let user = await db.Teacher.findOne({
+                    attributes:['username', 'password', 'id'],
+                    where: {
+                        username: username
+                    },
+                    raw: true
+                })
+                if(user) {
+                    let check = await bcrypt.compareSync( password, user.password);
+                    if(check) {
+                        userData.errCode = 0,
+                        userData.errMessage = 'Okk',
+                        delete user.matKhau;
+                        userData.user = user;
+                        // userData.token = jwt.sign(userData.user.id, process.env.JWT_SECRET)
+                    }
+                    else {
+                        userData.errCode = 3,
+                        userData.errMessage = 'Wrong password';
+                    }
+                }
+                else {
+                    userData.errCode = 2,
+                    userData.errMessage = 'Username isnt exist in your system';
+                }
+            }
+            else {
+                userData.errCode = 1;
+                userData.errMessage = 'Username isnt exist in your system';  
+            }
+            resolve(userData)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+let checkLoginStudent = (username, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let userData = {}
+            let isExit = await checkUsernameStudent(username)
+            if(isExit) {
+                let user = await db.Student.findOne({
+                    attributes:['username', 'password', 'id'],
+                    where: {
+                        username: username
+                    },
+                    raw: true
+                })
+                if(user) {
+                    let check = await bcrypt.compareSync( password, user.password);
+                    if(check) {
+                        userData.errCode = 0,
+                        userData.errMessage = 'Okk',
+                        delete user.matKhau;
+                        userData.user = user;
+                        // userData.token = jwt.sign(userData.user.id, process.env.JWT_SECRET)
+                    }
+                    else {
+                        userData.errCode = 3,
+                        userData.errMessage = 'Wrong password';
+                    }
+                }
+                else {
+                    userData.errCode = 2,
+                    userData.errMessage = 'Username isnt exist in your system';
+                }
+            }
+            else {
+                userData.errCode = 1;
+                userData.errMessage = 'Username isnt exist in your system';  
+            }
+            resolve(userData)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     createNewTeacher: createNewTeacher,
     checkUsernameTeacher: checkUsernameTeacher,
     createNewStudent: createNewStudent,
-    checkUsernameStudent: checkUsernameStudent
+    checkUsernameStudent: checkUsernameStudent,
+    checkLoginTeacher: checkLoginTeacher,
+    checkLoginStudent: checkLoginStudent
 }

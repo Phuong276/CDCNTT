@@ -32,7 +32,45 @@ let handleCreateNewStudent = async (req, res) => {
     })
 }
 
+let handleCheckLoginTeacher = async (req, res) => {
+    let password = req.body.password
+    let username = req.body.username
+    if(!password || !username) {
+        return res.status(500).json( {
+            errCode: 1,
+            message: 'Missing inputs parameter!'
+        })
+    }
+    let userData = await userServices.checkLoginTeacher(username, password)
+    return res.status(200).json( {
+        errCode: userData.errCode,
+        message: userData.errMessage,
+        user: userData.user,
+        // token: userData.token
+    })
+}
+
+let handleCheckLoginStudent = async (req, res) => {
+    let password = req.body.password
+    let username = req.body.username
+    if(!password || !username) {
+        return res.status(500).json( {
+            errCode: 1,
+            message: 'Missing inputs parameter!'
+        })
+    }
+    let userData = await userServices.checkLoginStudent(username, password)
+    return res.status(200).json( {
+        errCode: userData.errCode,
+        message: userData.errMessage,
+        user: userData.user,
+        // token: userData.token
+    })
+}
+
 module.exports = {
     handleCreateNewTeacher: handleCreateNewTeacher,
-    handleCreateNewStudent: handleCreateNewStudent
+    handleCreateNewStudent: handleCreateNewStudent,
+    handleCheckLoginTeacher: handleCheckLoginTeacher,
+    handleCheckLoginStudent: handleCheckLoginStudent
 }
