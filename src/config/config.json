@@ -1,0 +1,35 @@
+{
+    "development": {
+      "username": "root",
+      "password": null,
+      "database": "cdcntt",
+      "host": "127.0.0.1",
+      "dialect": "mysql",
+      "logging": false,
+      "timezone": "+07:00",
+      "query": {
+        "raw": true
+      },
+      "dialectOptions": {
+          "ssl": {
+              "require": true,
+              "rejectUnauthorized": false
+          }
+      }
+    },
+    "test": {
+      "username": "root",
+      "password": null,
+      "database": "hoidanit1",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    },
+    "production": {
+      "username": "root",
+      "password": null,
+      "database": "hoidanit1",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    }
+  }
+  
