@@ -175,11 +175,30 @@ let checkLoginStudent = (username, password) => {
     })
 }
 
+let getTeacherByIdTeacher = (id_Teacher) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let teacher = ''
+            teacher = await db.Teacher.findAll( {
+                where: {
+                    id: id_Teacher
+                },
+                raw:true,
+                nest:true
+            }) 
+            resolve(teacher)
+        } catch(e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     createNewTeacher: createNewTeacher,
     checkUsernameTeacher: checkUsernameTeacher,
     createNewStudent: createNewStudent,
     checkUsernameStudent: checkUsernameStudent,
     checkLoginTeacher: checkLoginTeacher,
-    checkLoginStudent: checkLoginStudent
+    checkLoginStudent: checkLoginStudent,
+    getTeacherByIdTeacher: getTeacherByIdTeacher
 }
