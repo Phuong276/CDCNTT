@@ -68,9 +68,27 @@ let handleCheckLoginStudent = async (req, res) => {
     })
 }
 
+let handleGetTeacherByIdTeacher = async (req, res) => {
+    let id = req.query.teacherId;
+    let teacher = await userServices.getTeacherByIdTeacher(id)
+    if(!id) {
+        return res.status(200).json( {
+            errCode: 1,
+            errMessage: 'Missing required parameters',
+            teacher: []
+        })
+    }
+    return res.status(200).json( {
+        errCode: 0,
+        errMessage: 'Ok',
+        teacher
+    })
+}
+
 module.exports = {
     handleCreateNewTeacher: handleCreateNewTeacher,
     handleCreateNewStudent: handleCreateNewStudent,
     handleCheckLoginTeacher: handleCheckLoginTeacher,
-    handleCheckLoginStudent: handleCheckLoginStudent
+    handleCheckLoginStudent: handleCheckLoginStudent,
+    handleGetTeacherByIdTeacher: handleGetTeacherByIdTeacher,
 }

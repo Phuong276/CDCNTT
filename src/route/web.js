@@ -16,7 +16,7 @@ let initWebRoutes = (app) => {
     router.post('/api/create-student', userControllers.handleCreateNewStudent)
     router.post('/api/check-login-teacher', userControllers.handleCheckLoginTeacher)
     router.post('/api/check-login-student', userControllers.handleCheckLoginStudent)
-
+    router.get('/api/get-teacher-by-id-teacher', userControllers.handleGetTeacherByIdTeacher)
 
     return app.use("/", router)
 }
