@@ -267,6 +267,48 @@ let updateTeacher = (data) => {
     })
 }
 
+let deleteTeacher = (teacherId) => {
+    return new Promise (async (resolve, reject) => {
+        let foundTeacher = await db.Teacher.findOne( {
+            where: { id: teacherId}
+        })
+        if(!foundTeacher) {
+            resolve( {
+                errCode: 2,
+                errMessage: 'Teacher isnt exit'
+            })
+        }
+        await db.Teacher.destroy( {
+            where: { id: teacherId}
+        })
+        resolve( {
+            errCode: 0,
+            errMessage: 'Delete Ok'
+        })
+    })
+}
+
+let deleteStudent = (studentId) => {
+    return new Promise (async (resolve, reject) => {
+        let foundStudent = await db.Student.findOne( {
+            where: { id: studentId}
+        })
+        if(!foundStudent) {
+            resolve( {
+                errCode: 2,
+                errMessage: 'Teacher isnt exit'
+            })
+        }
+        await db.Student.destroy( {
+            where: { id: studentId}
+        })
+        resolve( {
+            errCode: 0,
+            errMessage: 'Delete Ok'
+        })
+    })
+}
+
 module.exports = {
     createNewTeacher: createNewTeacher,
     checkUsernameTeacher: checkUsernameTeacher,
@@ -276,5 +318,7 @@ module.exports = {
     checkLoginStudent: checkLoginStudent,
     getTeacherByIdTeacher: getTeacherByIdTeacher,
     updateStudent: updateStudent,
-    updateTeacher: updateTeacher
+    updateTeacher: updateTeacher,
+    deleteTeacher: deleteTeacher,
+    deleteStudent: deleteStudent
 }

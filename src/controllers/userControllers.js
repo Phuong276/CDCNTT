@@ -101,6 +101,32 @@ let handleUpdateTeacher = async (req, res) => {
     })
 }
 
+let handleDeleteTeacher = async (req, res) => {
+    if(!req.body.id) {
+        return res.status(200).json( {
+            errCode: 1,
+            errMessage: "Missing requid parameters"
+        })
+    }
+    let message = await userServices.deleteTeacher(req.body.id)
+    return res.status(200).json( {
+        errMessage: message
+    })
+}
+
+let handleDeleteStudent = async (req, res) => {
+    if(!req.body.id) {
+        return res.status(200).json( {
+            errCode: 1,
+            errMessage: "Missing requid parameters"
+        })
+    }
+    let message = await userServices.deleteStudent(req.body.id)
+    return res.status(200).json( {
+        errMessage: message
+    })
+}
+
 module.exports = {
     handleCreateNewTeacher: handleCreateNewTeacher,
     handleCreateNewStudent: handleCreateNewStudent,
@@ -108,5 +134,7 @@ module.exports = {
     handleCheckLoginStudent: handleCheckLoginStudent,
     handleGetTeacherByIdTeacher: handleGetTeacherByIdTeacher,
     handleUpdateStudent: handleUpdateStudent,
-    handleUpdateTeacher: handleUpdateTeacher
+    handleUpdateTeacher: handleUpdateTeacher,
+    handleDeleteTeacher: handleDeleteTeacher,
+    handleDeleteStudent: handleDeleteStudent
 }
