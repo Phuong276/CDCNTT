@@ -93,11 +93,20 @@ let handleUpdateStudent = async (req, res) => {
     })
 }
 
+let handleUpdateTeacher = async (req, res) => {
+    let data = req.body
+    let message = await userServices.updateTeacher(data)
+    return res.status(200).json( {
+        errMessage: message
+    })
+}
+
 module.exports = {
     handleCreateNewTeacher: handleCreateNewTeacher,
     handleCreateNewStudent: handleCreateNewStudent,
     handleCheckLoginTeacher: handleCheckLoginTeacher,
     handleCheckLoginStudent: handleCheckLoginStudent,
     handleGetTeacherByIdTeacher: handleGetTeacherByIdTeacher,
-    handleUpdateStudent: handleUpdateStudent
+    handleUpdateStudent: handleUpdateStudent,
+    handleUpdateTeacher: handleUpdateTeacher
 }
