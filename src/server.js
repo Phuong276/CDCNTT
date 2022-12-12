@@ -4,14 +4,14 @@ import viewEngine from "./config/viewEngine"
 import initWebRoutes from "./route/web"
 import connectDB from "./config/connectDB"
 import morgan from 'morgan'
-// import cors from "cors"
+import cors from "cors"
 import { createJWT } from "./middleware/JWTActions"
 import { verifyToken } from "./middleware/JWTActions"
 
 require('dotenv').config();
 
 let app = express();
-// app.use(cors( {origin: true}));
+app.use(cors());
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))

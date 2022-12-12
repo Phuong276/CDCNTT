@@ -10,13 +10,13 @@ let initWebRoutes = (app) => {
     router.get("/", ratringControllers.getHomePage)
 
     router.get('/api/ratings', ratringControllers.handleGetAllRatingByIdTeacher)
-    router.post('/api/rating', ratringControllers.handleCreateNewRating)
+    router.post('/api/ratings', ratringControllers.handleCreateNewRating)
 
-    router.get('/api/teacher', teacherControllers.getAllTeacher)
-    router.post('/api/teacher', userControllers.handleCreateNewTeacher)
-    router.post('/api/student', userControllers.handleCreateNewStudent)
-    router.post('/api/teacher/login', userControllers.handleCheckLoginTeacher)
-    router.post('/api/student/login', userControllers.handleCheckLoginStudent)
+    router.get('/api/teachers', teacherControllers.getAllTeacher)
+    router.post('/api/teachers', userControllers.handleCreateNewTeacher)
+    router.post('/api/students', userControllers.handleCreateNewStudent)
+    router.post('/api/teachers/login', userControllers.handleCheckLoginTeacher)
+    router.post('/api/students/login', userControllers.handleCheckLoginStudent)
 
 
     return app.use("/", router)
