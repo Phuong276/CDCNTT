@@ -1,6 +1,7 @@
 import express from "express"
 import ratringControllers from "../controllers/ratingControllers"
 import userControllers from "../controllers/userControllers"
+import teacherControllers from "../controllers/teacherController"
 
 
 let router =express.Router()
@@ -8,14 +9,14 @@ let router =express.Router()
 let initWebRoutes = (app) => {
     router.get("/", ratringControllers.getHomePage)
 
-    router.get('/api/get-ratings-by-id-teacher', ratringControllers.handleGetAllRatingByIdTeacher)
-    router.post('/api/create-rating', ratringControllers.handleCreateNewRating)
+    router.get('/api/ratings', ratringControllers.handleGetAllRatingByIdTeacher)
+    router.post('/api/rating', ratringControllers.handleCreateNewRating)
 
-
-    router.post('/api/create-teacher', userControllers.handleCreateNewTeacher)
-    router.post('/api/create-student', userControllers.handleCreateNewStudent)
-    router.post('/api/check-login-teacher', userControllers.handleCheckLoginTeacher)
-    router.post('/api/check-login-student', userControllers.handleCheckLoginStudent)
+    router.get('/api/teacher', teacherControllers.getAllTeacher)
+    router.post('/api/teacher', userControllers.handleCreateNewTeacher)
+    router.post('/api/student', userControllers.handleCreateNewStudent)
+    router.post('/api/teacher/login', userControllers.handleCheckLoginTeacher)
+    router.post('/api/student/login', userControllers.handleCheckLoginStudent)
 
 
     return app.use("/", router)

@@ -22,7 +22,7 @@ let connectDB = async () => {
        await sequelize.authenticate()
        console.log('Connection DB successfully') 
     } catch(error) {
-        console('Eroor:', error)
+        console.log('Eroor:', error)
     }
 }
 

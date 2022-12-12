@@ -28,11 +28,12 @@ let createNewTeacher = async (data) => {
             phone: data.phone,
             address: data.address,
             experience: data.experience,
-            dregree: data.address,
-            cetificate: data.experience,
+            dregree: data.degree,
+            cetificate: data.certificate,
         })
         resolve(teacher)
     } catch(e) {
+        console.log(e)
         reject(e)
     }
 }
