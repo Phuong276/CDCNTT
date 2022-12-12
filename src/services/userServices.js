@@ -192,6 +192,41 @@ let getTeacherByIdTeacher = (id_Teacher) => {
     })
 }
 
+let updateStudent = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if(!data.id) {
+                resolve({
+                    errCode: 2,
+                    errMessage: 'Missing required paramets!'
+                })
+            }
+            let student = await db.Student.findOne({
+                where: {id: data.id},
+                raw: false
+            })
+            if(student) {
+                student.firstName = data.firstName,
+                student.lastName = data.lastName,
+                student.phone = data.phone,
+                await student.save()
+                resolve({
+                    errCode: 0,
+                    message: 'Update the user succeeds!'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Mat hang not found'
+                });
+            }
+        } catch(e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     createNewTeacher: createNewTeacher,
     checkUsernameTeacher: checkUsernameTeacher,
@@ -199,5 +234,6 @@ module.exports = {
     checkUsernameStudent: checkUsernameStudent,
     checkLoginTeacher: checkLoginTeacher,
     checkLoginStudent: checkLoginStudent,
-    getTeacherByIdTeacher: getTeacherByIdTeacher
+    getTeacherByIdTeacher: getTeacherByIdTeacher,
+    updateStudent: updateStudent
 }
