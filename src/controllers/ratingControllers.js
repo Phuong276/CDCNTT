@@ -12,18 +12,18 @@ let getHomePage = async (req, res) => {
 
 let handleGetAllRatingByIdTeacher = async (req, res) => {
     let id = req.query.teacherId;
-    let mathangs = await ratingServices.getAllRatingByIdTeacher(id)
+    let ratings = await ratingServices.getAllRatingByIdTeacher(id)
     if(!id) {
         return res.status(200).json( {
             errCode: 1,
             errMessage: 'Missing required parameters',
-            mathangs: []
+            ratings: []
         })
     }
     return res.status(200).json( {
         errCode: 0,
         errMessage: 'Ok',
-        mathangs
+        ratings
     })
 }
 
