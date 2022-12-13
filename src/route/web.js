@@ -21,6 +21,7 @@ let initWebRoutes = (app) => {
     router.put('/api/update-teacher', userControllers.handleUpdateTeacher)
     router.delete('/api/delete-teacher',userControllers.handleDeleteTeacher)
     router.delete('/api/delete-student',userControllers.handleDeleteStudent)
+    router.get('/api/get-teacher-by-id-student', userControllers.handleGetStudentByIdStudent)
     
     return app.use("/", router)
 }

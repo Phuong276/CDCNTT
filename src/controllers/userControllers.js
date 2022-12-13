@@ -127,6 +127,23 @@ let handleDeleteStudent = async (req, res) => {
     })
 }
 
+let handleGetStudentByIdStudent = async (req, res) => {
+    let id = req.query.studentId;
+    let student = await userServices.getStudentByIdStudent(id)
+    if(!id) {
+        return res.status(200).json( {
+            errCode: 1,
+            errMessage: 'Missing required parameters',
+            student: []
+        })
+    }
+    return res.status(200).json( {
+        errCode: 0,
+        errMessage: 'Ok',
+        student
+    })
+}
+
 module.exports = {
     handleCreateNewTeacher: handleCreateNewTeacher,
     handleCreateNewStudent: handleCreateNewStudent,
@@ -136,5 +153,6 @@ module.exports = {
     handleUpdateStudent: handleUpdateStudent,
     handleUpdateTeacher: handleUpdateTeacher,
     handleDeleteTeacher: handleDeleteTeacher,
-    handleDeleteStudent: handleDeleteStudent
+    handleDeleteStudent: handleDeleteStudent,
+    handleGetStudentByIdStudent: handleGetStudentByIdStudent
 }

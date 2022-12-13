@@ -309,6 +309,24 @@ let deleteStudent = (studentId) => {
     })
 }
 
+let getStudentByIdStudent = (id_Student) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let student = ''
+            student = await db.Student.findAll( {
+                where: {
+                    id: id_Student
+                },
+                raw:true,
+                nest:true
+            }) 
+            resolve(student)
+        } catch(e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     createNewTeacher: createNewTeacher,
     checkUsernameTeacher: checkUsernameTeacher,
@@ -320,5 +338,6 @@ module.exports = {
     updateStudent: updateStudent,
     updateTeacher: updateTeacher,
     deleteTeacher: deleteTeacher,
-    deleteStudent: deleteStudent
+    deleteStudent: deleteStudent,
+    getStudentByIdStudent: getStudentByIdStudent
 }
