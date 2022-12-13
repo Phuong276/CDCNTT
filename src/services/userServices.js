@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
-import { reject, resolve } from 'promise'
-import db, { Sequelize } from '../models/index'
+import {reject, resolve} from 'promise'
+import db, {Sequelize} from '../models/index'
 import ratingServices from './ratingServices'
 
 const salt = bcrypt.genSaltSync(10)
@@ -43,7 +43,7 @@ let checkUsernameTeacher = (username) => {
     return new Promise(async (resolve, reject) => {
         try {
             let teacher = await db.Teacher.findOne({
-                where: { username: username }
+                where: {username: username}
             })
             if (teacher) {
                 resolve(true)
@@ -77,7 +77,7 @@ let checkUsernameStudent = (username) => {
     return new Promise(async (resolve, reject) => {
         try {
             let student = await db.Student.findOne({
-                where: { username: username }
+                where: {username: username}
             })
             if (student) {
                 resolve(true)
@@ -111,18 +111,15 @@ let checkLoginTeacher = (username, password) => {
                             delete user.matKhau;
                         userData.user = user;
                         // userData.token = jwt.sign(userData.user.id, process.env.JWT_SECRET)
-                    }
-                    else {
+                    } else {
                         userData.errCode = 3,
                             userData.errMessage = 'Wrong password';
                     }
-                }
-                else {
+                } else {
                     userData.errCode = 2,
                         userData.errMessage = 'Username isnt exist in your system';
                 }
-            }
-            else {
+            } else {
                 userData.errCode = 1;
                 userData.errMessage = 'Username isnt exist in your system';
             }
@@ -154,18 +151,15 @@ let checkLoginStudent = (username, password) => {
                             delete user.matKhau;
                         userData.user = user;
                         // userData.token = jwt.sign(userData.user.id, process.env.JWT_SECRET)
-                    }
-                    else {
+                    } else {
                         userData.errCode = 3,
                             userData.errMessage = 'Wrong password';
                     }
-                }
-                else {
+                } else {
                     userData.errCode = 2,
                         userData.errMessage = 'Username isnt exist in your system';
                 }
-            }
-            else {
+            } else {
                 userData.errCode = 1;
                 userData.errMessage = 'Username isnt exist in your system';
             }
@@ -220,7 +214,7 @@ let updateStudent = (data) => {
                 })
             }
             let student = await db.Student.findOne({
-                where: { id: data.id },
+                where: {id: data.id},
                 raw: false
             })
             if (student) {
@@ -232,8 +226,7 @@ let updateStudent = (data) => {
                     errCode: 0,
                     message: 'Update the user succeeds!'
                 })
-            }
-            else {
+            } else {
                 resolve({
                     errCode: 1,
                     errMessage: 'Mat hang not found'
@@ -255,7 +248,7 @@ let updateTeacher = (data) => {
                 })
             }
             let teacher = await db.Teacher.findOne({
-                where: { id: data.id },
+                where: {id: data.id},
                 raw: false
             })
             if (teacher) {
@@ -272,8 +265,7 @@ let updateTeacher = (data) => {
                     errCode: 0,
                     message: 'Update the user succeeds!'
                 })
-            }
-            else {
+            } else {
                 resolve({
                     errCode: 1,
                     errMessage: 'Mat hang not found'
@@ -288,7 +280,7 @@ let updateTeacher = (data) => {
 let deleteTeacher = (teacherId) => {
     return new Promise(async (resolve, reject) => {
         let foundTeacher = await db.Teacher.findOne({
-            where: { id: teacherId }
+            where: {id: teacherId}
         })
         if (!foundTeacher) {
             resolve({
@@ -297,7 +289,7 @@ let deleteTeacher = (teacherId) => {
             })
         }
         await db.Teacher.destroy({
-            where: { id: teacherId }
+            where: {id: teacherId}
         })
         resolve({
             errCode: 0,
@@ -309,7 +301,7 @@ let deleteTeacher = (teacherId) => {
 let deleteStudent = (studentId) => {
     return new Promise(async (resolve, reject) => {
         let foundStudent = await db.Student.findOne({
-            where: { id: studentId }
+            where: {id: studentId}
         })
         if (!foundStudent) {
             resolve({
@@ -318,7 +310,7 @@ let deleteStudent = (studentId) => {
             })
         }
         await db.Student.destroy({
-            where: { id: studentId }
+            where: {id: studentId}
         })
         resolve({
             errCode: 0,
@@ -348,18 +340,18 @@ let getStudentByIdStudent = (id_Student) => {
 let getAllTeacher = async () => {
     try {
         const docs = await db.Teacher.findAll({
-            attributes: ["id",
-                "username",
-                "firstName",
-                "lastName",
-                "photo",
-                "phone",
-                "address",
-                "experience",
-                "dregree",
-                "cetificate",
-                "createdAt",]
-        },
+                attributes: ["id",
+                    "username",
+                    "firstName",
+                    "lastName",
+                    "photo",
+                    "phone",
+                    "address",
+                    "experience",
+                    "dregree",
+                    "cetificate",
+                    "createdAt",]
+            },
         )
 
         for (let i = 0; i < docs.length; i++) {
@@ -379,14 +371,11 @@ let searchTeacher = async (nameTeacher) => {
     let teacher = await db.Teacher.findAll({
         where: {
             lastName: {
-                [Op.like]: nameTeacher
-            },
-            firstName: {
-                [Op.like]: nameTeacher
+                [Op.like]: `%${nameTeacher}%`
             }
         }
     })
-    resolve(teacher)
+    return teacher
 }
 
 module.exports = {
