@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { reject, resolve } from 'promise'
 import db from '../models/index'
+import ratingServices from './ratingServices'
 
 const salt = bcrypt.genSaltSync(10)
 
@@ -328,6 +329,35 @@ let getStudentByIdStudent = (id_Student) => {
     })
 }
 
+let getAllTeacher = async () => {
+    try {
+        const docs = await db.Teacher.findAll({
+                attributes: ["id",
+                    "username",
+                    "firstName",
+                    "lastName",
+                    "photo",
+                    "phone",
+                    "address",
+                    "experience",
+                    "dregree",
+                    "cetificate",
+                    "createdAt",]
+            },
+        )
+
+        for(let i=0;i<docs.length;i++){
+            const rs =await ratingServices.selectAVGRatingByTeacherId(docs[i].id)
+            docs[i].rating = rs
+        }
+
+        return docs
+    } catch (err) {
+        console.log("Error from services.getAllTeacher", err)
+        return []
+    }
+}
+
 module.exports = {
     createNewTeacher: createNewTeacher,
     checkUsernameTeacher: checkUsernameTeacher,
@@ -341,4 +371,5 @@ module.exports = {
     deleteTeacher: deleteTeacher,
     deleteStudent: deleteStudent,
     getStudentByIdStudent: getStudentByIdStudent,
+    getAllTeacher,
 }
