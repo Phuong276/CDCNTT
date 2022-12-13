@@ -1,5 +1,6 @@
 import { reject, resolve } from "promise";
 import db from "../models/index"
+import {Sequelize} from "sequelize";
 
 let getAllRatingByIdTeacher = (id_Teacher) => {
     return new Promise(async (resolve, reject) => {
@@ -38,7 +39,23 @@ let createNewRating = async (data) => {
     }
 }
 
+const selectAVGRatingByTeacherId = async (id) => {
+    try {
+        const avg = await db.Rating.findAll({
+            where: {id_Teacher: id},
+            attributes: [
+                [Sequelize.fn('AVG', Sequelize.col('Rating.rating')), 'avgRating'],]
+        })
+        console.log(avg[0].avgRating)
+        return avg[0].avgRating
+    } catch (err) {
+        console.log(err.message)
+        return 0
+    }
+}
+
 module.exports = {
     getAllRatingByIdTeacher: getAllRatingByIdTeacher,
-    createNewRating: createNewRating
+    createNewRating: createNewRating,
+    selectAVGRatingByTeacherId
 }
