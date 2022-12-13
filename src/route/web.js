@@ -15,12 +15,12 @@ let initWebRoutes = (app) => {
     router.post('/api/students', userControllers.handleCreateNewStudent)
     router.post('/api/teachers/login', userControllers.handleCheckLoginTeacher)
     router.post('/api/students/login', userControllers.handleCheckLoginStudent)
-    router.get('/api/get-teacher-by-id-teacher', userControllers.handleGetTeacherByIdTeacher)
-    router.put('/api/update-student', userControllers.handleUpdateStudent)
-    router.put('/api/update-teacher', userControllers.handleUpdateTeacher)
-    router.delete('/api/delete-teacher', userControllers.handleDeleteTeacher)
-    router.delete('/api/delete-student', userControllers.handleDeleteStudent)
-    router.get('/api/get-student-by-id-student', userControllers.handleGetStudentByIdStudent)
+    router.get('/api/teachers/:id', userControllers.handleGetTeacherByIdTeacher)
+    router.put('/api/student', userControllers.handleUpdateStudent)
+    router.put('/api/teacher', userControllers.handleUpdateTeacher)
+    router.delete('/api/teacher', userControllers.handleDeleteTeacher)
+    router.delete('/api/student', userControllers.handleDeleteStudent)
+    router.get('/api/students/:id', userControllers.handleGetStudentByIdStudent)
 
 
     return app.use("/", router)

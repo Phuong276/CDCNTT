@@ -184,9 +184,25 @@ let getTeacherByIdTeacher = (id_Teacher) => {
                 where: {
                     id: id_Teacher
                 },
+                attributes: ["id",
+                    "username",
+                    "firstName",
+                    "lastName",
+                    "photo",
+                    "phone",
+                    "address",
+                    "experience",
+                    "dregree",
+                    "cetificate",
+                    "createdAt",],
                 raw: true,
                 nest: true
             })
+            for(let i=0;i<teacher.length;i++){
+                const rs =await ratingServices.selectAVGRatingByTeacherId(teacher[i].id)
+                teacher[i].rating = rs
+            }
+
             resolve(teacher)
         } catch (e) {
             reject(e)
