@@ -3,7 +3,7 @@ import ratringControllers from "../controllers/ratingControllers"
 import userControllers from "../controllers/userControllers"
 
 
-let router =express.Router()
+let router = express.Router()
 
 let initWebRoutes = (app) => {
     router.get("/", ratringControllers.getHomePage)
@@ -19,9 +19,10 @@ let initWebRoutes = (app) => {
     router.get('/api/get-teacher-by-id-teacher', userControllers.handleGetTeacherByIdTeacher)
     router.put('/api/update-student', userControllers.handleUpdateStudent)
     router.put('/api/update-teacher', userControllers.handleUpdateTeacher)
-    router.delete('/api/delete-teacher',userControllers.handleDeleteTeacher)
-    router.delete('/api/delete-student',userControllers.handleDeleteStudent)
-    
+    router.delete('/api/delete-teacher', userControllers.handleDeleteTeacher)
+    router.delete('/api/delete-student', userControllers.handleDeleteStudent)
+    router.get('/api/get-student-by-id-student', userControllers.handleGetStudentByIdStudent)
+
     return app.use("/", router)
 }
 
