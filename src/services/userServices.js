@@ -383,7 +383,7 @@ let searchTeacher = async (nameTeacher) => {
             }
         }
     })
-    return teacher
+    return teacher;
 }
 
 module.exports = {
