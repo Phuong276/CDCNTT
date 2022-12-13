@@ -69,7 +69,7 @@ let handleCheckLoginStudent = async (req, res) => {
 }
 
 let handleGetTeacherByIdTeacher = async (req, res) => {
-    let id =Number(req.params.id);
+    let id = Number(req.params.id);
     let teacher = await userServices.getTeacherByIdTeacher(id)
     if (!id) {
         return res.status(200).json({
@@ -145,10 +145,22 @@ let handleGetStudentByIdStudent = async (req, res) => {
 
 }
 
-let getAllTeacher = async (req,res)=>{
+let getAllTeacher = async (req, res) => {
     let records = await userServices.getAllTeacher()
     res.status(200).json({
         records,
+        errCode: 0,
+        errMessage: 'Ok',
+    })
+}
+let searchTeacher = async (req, res) => {
+    let name = req.query.name
+    if (!name) {
+        name = ''
+    }
+    let teacher = await userServices.searchTeacher(name)
+    res.status(200).json({
+        teacher,
         errCode: 0,
         errMessage: 'Ok',
     })
@@ -166,4 +178,5 @@ module.exports = {
     handleDeleteStudent: handleDeleteStudent,
     handleGetStudentByIdStudent: handleGetStudentByIdStudent,
     getAllTeacher,
+    searchTeacher: searchTeacher,
 }
