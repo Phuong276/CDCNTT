@@ -145,6 +145,15 @@ let handleGetStudentByIdStudent = async (req, res) => {
 
 }
 
+let getAllTeacher = async (req,res)=>{
+    let records = await userServices.getAllTeacher()
+    res.status(200).json({
+        records,
+        errCode: 0,
+        errMessage: 'Ok',
+    })
+}
+
 module.exports = {
     handleCreateNewTeacher: handleCreateNewTeacher,
     handleCreateNewStudent: handleCreateNewStudent,
@@ -156,4 +165,5 @@ module.exports = {
     handleDeleteTeacher: handleDeleteTeacher,
     handleDeleteStudent: handleDeleteStudent,
     handleGetStudentByIdStudent: handleGetStudentByIdStudent,
+    getAllTeacher,
 }
