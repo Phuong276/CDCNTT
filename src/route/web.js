@@ -1,7 +1,7 @@
 import express from "express"
 import ratringControllers from "../controllers/ratingControllers"
 import userControllers from "../controllers/userControllers"
-
+import teacherControllers from '../controllers/teacherController'
 
 let router =express.Router()
 
