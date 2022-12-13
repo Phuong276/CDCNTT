@@ -18,7 +18,7 @@ let initWebRoutes = (app) => {
     router.post('/api/check-login-student', userControllers.handleCheckLoginStudent)
     router.get('/api/get-teacher-by-id-teacher', userControllers.handleGetTeacherByIdTeacher)
     router.put('/api/update-student', userControllers.handleUpdateStudent)
-
+    router.put('/api/update-teacher', userControllers.handleUpdateTeacher)
     return app.use("/", router)
 }
 
