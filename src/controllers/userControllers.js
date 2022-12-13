@@ -2,11 +2,19 @@ import userServices from "../services/userServices"
 
 let handleCreateNewTeacher = async (req, res) => {
     let check = await userServices.checkUsernameTeacher(req.body.username)
-    let teacher = await userServices.createNewTeacher(req.body)
     if (check) {
         return res.status(200).json({
             errCode: 0,
             errMessage: 'Username teacher is exit',
+        })
+    }
+
+    let teacher = await userServices.createNewTeacher(req.body)
+    if (teacher instanceof  Error){
+        return res.status(400).json({
+            errCode: 0,
+            errMessage: 'fail',
+            teacher
         })
     }
     return res.status(200).json({
@@ -18,11 +26,19 @@ let handleCreateNewTeacher = async (req, res) => {
 
 let handleCreateNewStudent = async (req, res) => {
     let check = await userServices.checkUsernameStudent(req.body.username)
-    let student = await userServices.createNewStudent(req.body)
     if (check) {
         return res.status(200).json({
             errCode: 0,
             errMessage: 'Username student is exit',
+        })
+    }
+
+    let student = await userServices.createNewStudent(req.body)
+    if (student instanceof  Error){
+        return res.status(400).json({
+            errCode: 0,
+            errMessage: 'fail',
+            student
         })
     }
     return res.status(200).json({
@@ -69,7 +85,7 @@ let handleCheckLoginStudent = async (req, res) => {
 }
 
 let handleGetTeacherByIdTeacher = async (req, res) => {
-    let id = req.query.teacherId;
+    let id = Number(req.params.id);
     let teacher = await userServices.getTeacherByIdTeacher(id)
     if (!id) {
         return res.status(200).json({
@@ -128,7 +144,7 @@ let handleDeleteStudent = async (req, res) => {
 }
 
 let handleGetStudentByIdStudent = async (req, res) => {
-    let id = req.query.StudentId;
+    let id = Number(req.params.id);
     if (!id) {
         return res.status(200).json({
             errCode: 1,
@@ -145,10 +161,22 @@ let handleGetStudentByIdStudent = async (req, res) => {
 
 }
 
-let getAllTeacher = async (req,res)=>{
+let getAllTeacher = async (req, res) => {
     let records = await userServices.getAllTeacher()
     res.status(200).json({
         records,
+        errCode: 0,
+        errMessage: 'Ok',
+    })
+}
+let searchTeacher = async (req, res) => {
+    let name = req.query.name
+    if (!name) {
+        name = ''
+    }
+    let teacher = await userServices.searchTeacher(name)
+    res.status(200).json({
+        teacher,
         errCode: 0,
         errMessage: 'Ok',
     })
@@ -166,4 +194,5 @@ module.exports = {
     handleDeleteStudent: handleDeleteStudent,
     handleGetStudentByIdStudent: handleGetStudentByIdStudent,
     getAllTeacher,
+    searchTeacher: searchTeacher,
 }

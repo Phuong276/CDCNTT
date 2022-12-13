@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
-import { reject, resolve } from 'promise'
-import db from '../models/index'
+import {reject, resolve} from 'promise'
+import db, {Sequelize} from '../models/index'
 import ratingServices from './ratingServices'
 
 const salt = bcrypt.genSaltSync(10)
@@ -32,9 +32,9 @@ let createNewTeacher = async (data) => {
             dregree: data.degree,
             cetificate: data.certificate,
         })
-        resolve(teacher)
+        return teacher
 
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
 }
@@ -43,7 +43,7 @@ let checkUsernameTeacher = (username) => {
     return new Promise(async (resolve, reject) => {
         try {
             let teacher = await db.Teacher.findOne({
-                where: { username: username }
+                where: {username: username}
             })
             if (teacher) {
                 resolve(true)
@@ -67,9 +67,9 @@ let createNewStudent = async (data) => {
             lastName: data.lastName,
             phone: data.phone,
         })
-        resolve(student)
+        return student
     } catch (e) {
-        reject(e)
+        return e
     }
 }
 
@@ -77,7 +77,7 @@ let checkUsernameStudent = (username) => {
     return new Promise(async (resolve, reject) => {
         try {
             let student = await db.Student.findOne({
-                where: { username: username }
+                where: {username: username}
             })
             if (student) {
                 resolve(true)
@@ -111,18 +111,15 @@ let checkLoginTeacher = (username, password) => {
                             delete user.matKhau;
                         userData.user = user;
                         // userData.token = jwt.sign(userData.user.id, process.env.JWT_SECRET)
-                    }
-                    else {
+                    } else {
                         userData.errCode = 3,
                             userData.errMessage = 'Wrong password';
                     }
-                }
-                else {
+                } else {
                     userData.errCode = 2,
                         userData.errMessage = 'Username isnt exist in your system';
                 }
-            }
-            else {
+            } else {
                 userData.errCode = 1;
                 userData.errMessage = 'Username isnt exist in your system';
             }
@@ -154,18 +151,15 @@ let checkLoginStudent = (username, password) => {
                             delete user.matKhau;
                         userData.user = user;
                         // userData.token = jwt.sign(userData.user.id, process.env.JWT_SECRET)
-                    }
-                    else {
+                    } else {
                         userData.errCode = 3,
                             userData.errMessage = 'Wrong password';
                     }
-                }
-                else {
+                } else {
                     userData.errCode = 2,
                         userData.errMessage = 'Username isnt exist in your system';
                 }
-            }
-            else {
+            } else {
                 userData.errCode = 1;
                 userData.errMessage = 'Username isnt exist in your system';
             }
@@ -184,9 +178,25 @@ let getTeacherByIdTeacher = (id_Teacher) => {
                 where: {
                     id: id_Teacher
                 },
+                attributes: ["id",
+                    "username",
+                    "firstName",
+                    "lastName",
+                    "photo",
+                    "phone",
+                    "address",
+                    "experience",
+                    "dregree",
+                    "cetificate",
+                    "createdAt",],
                 raw: true,
                 nest: true
             })
+            for (let i = 0; i < teacher.length; i++) {
+                const rs = await ratingServices.selectAVGRatingByTeacherId(teacher[i].id)
+                teacher[i].rating = rs
+            }
+
             resolve(teacher)
         } catch (e) {
             reject(e)
@@ -204,7 +214,7 @@ let updateStudent = (data) => {
                 })
             }
             let student = await db.Student.findOne({
-                where: { id: data.id },
+                where: {id: data.id},
                 raw: false
             })
             if (student) {
@@ -216,8 +226,7 @@ let updateStudent = (data) => {
                     errCode: 0,
                     message: 'Update the user succeeds!'
                 })
-            }
-            else {
+            } else {
                 resolve({
                     errCode: 1,
                     errMessage: 'Mat hang not found'
@@ -239,7 +248,7 @@ let updateTeacher = (data) => {
                 })
             }
             let teacher = await db.Teacher.findOne({
-                where: { id: data.id },
+                where: {id: data.id},
                 raw: false
             })
             if (teacher) {
@@ -256,8 +265,7 @@ let updateTeacher = (data) => {
                     errCode: 0,
                     message: 'Update the user succeeds!'
                 })
-            }
-            else {
+            } else {
                 resolve({
                     errCode: 1,
                     errMessage: 'Mat hang not found'
@@ -272,7 +280,7 @@ let updateTeacher = (data) => {
 let deleteTeacher = (teacherId) => {
     return new Promise(async (resolve, reject) => {
         let foundTeacher = await db.Teacher.findOne({
-            where: { id: teacherId }
+            where: {id: teacherId}
         })
         if (!foundTeacher) {
             resolve({
@@ -281,7 +289,7 @@ let deleteTeacher = (teacherId) => {
             })
         }
         await db.Teacher.destroy({
-            where: { id: teacherId }
+            where: {id: teacherId}
         })
         resolve({
             errCode: 0,
@@ -293,7 +301,7 @@ let deleteTeacher = (teacherId) => {
 let deleteStudent = (studentId) => {
     return new Promise(async (resolve, reject) => {
         let foundStudent = await db.Student.findOne({
-            where: { id: studentId }
+            where: {id: studentId}
         })
         if (!foundStudent) {
             resolve({
@@ -302,7 +310,7 @@ let deleteStudent = (studentId) => {
             })
         }
         await db.Student.destroy({
-            where: { id: studentId }
+            where: {id: studentId}
         })
         resolve({
             errCode: 0,
@@ -346,8 +354,8 @@ let getAllTeacher = async () => {
             },
         )
 
-        for(let i=0;i<docs.length;i++){
-            const rs =await ratingServices.selectAVGRatingByTeacherId(docs[i].id)
+        for (let i = 0; i < docs.length; i++) {
+            const rs = await ratingServices.selectAVGRatingByTeacherId(docs[i].id)
             docs[i].rating = rs
         }
 
@@ -356,6 +364,18 @@ let getAllTeacher = async () => {
         console.log("Error from services.getAllTeacher", err)
         return []
     }
+}
+
+let searchTeacher = async (nameTeacher) => {
+    let Op = Sequelize.Op;
+    let teacher = await db.Teacher.findAll({
+        where: {
+            lastName: {
+                [Op.like]: `%${nameTeacher}%`
+            }
+        }
+    })
+    return teacher
 }
 
 module.exports = {
@@ -372,4 +392,6 @@ module.exports = {
     deleteStudent: deleteStudent,
     getStudentByIdStudent: getStudentByIdStudent,
     getAllTeacher,
+    searchTeacher: searchTeacher,
+
 }

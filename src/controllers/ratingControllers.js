@@ -28,11 +28,16 @@ let handleGetAllRatingByIdTeacher = async (req, res) => {
 }
 
 let handleCreateNewRating = async (req, res) => {
-    let rating = await ratingServices.createNewRating(req.body)
+    let err = await ratingServices.createNewRating(req.body)
+    if(err instanceof Error){
+        return res.status(400).json({
+            errCode: 0,
+            errMessage: 'fail',
+        })
+    }
     return res.status(200).json( {
         errCode: 0,
         errMessage: 'Ok',
-        rating
     })
 }
 
