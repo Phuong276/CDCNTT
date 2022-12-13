@@ -5,6 +5,12 @@ import userControllers from "../controllers/userControllers"
 let router = express.Router()
 
 let initWebRoutes = (app) => {
+    router.use((req,res,next)=>{
+        console.log("params: ", req.params)
+        console.log("query: ",req.query)
+        console.log("body: ",req.body)
+        next();
+    })
     router.get("/", ratringControllers.getHomePage)
 
     router.get('/api/ratings', ratringControllers.handleGetAllRatingByIdTeacher)

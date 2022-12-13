@@ -26,16 +26,18 @@ let getAllRatingByIdTeacher = (id_Teacher) => {
 
 let createNewRating = async (data) => {
     try {
-        let ratring = ''
-        ratring = await db.Rating.create( {
-            id_Teacher: data.id_Teacher,
-            id_Student: data.id_Student,
+
+        let doc = await db.Rating.create( {
+            id_Teacher: data.idTeacher,
+            id_Student: data.idStudent,
             comment: data.comment,
             rating: data.rating,
         })
-        resolve(ratring)
+        await doc.save()
+        return doc
     } catch(e) {
-        reject(e)
+        console.log(e)
+        return e
     }
 }
 

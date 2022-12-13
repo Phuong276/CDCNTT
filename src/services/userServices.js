@@ -32,7 +32,7 @@ let createNewTeacher = async (data) => {
             dregree: data.degree,
             cetificate: data.certificate,
         })
-        resolve(teacher)
+        return teacher
 
     } catch (e) {
         console.log(e)
@@ -67,9 +67,9 @@ let createNewStudent = async (data) => {
             lastName: data.lastName,
             phone: data.phone,
         })
-        resolve(student)
+        return student
     } catch (e) {
-        reject(e)
+        return e
     }
 }
 
