@@ -1,125 +1,159 @@
 import userServices from "../services/userServices"
-require("dotenv").config()
-const jwt = require('jsonwebtoken')
 
-let handleCheckToken = (token, next) => {
-        let decoded = jwt.verify(token, process.env.JWT_SECRET)
-        if(decoded) {
-            next
-        }
-}
-
-let handleCreateNewKhachHang = async (req, res) => {
-    let khachhang = await userServices.createNewKhachHang(req.body)
-    let check = await userServices.checkTenNguoiDungKH(req.body.tenNguoiDung)
-    if(check) {
-        return res.status(200).json( {
+let handleCreateNewTeacher = async (req, res) => {
+    let check = await userServices.checkUsernameTeacher(req.body.username)
+    let teacher = await userServices.createNewTeacher(req.body)
+    if (check) {
+        return res.status(200).json({
             errCode: 0,
-            errMessage: 'Ten khach hang da ton tai',
+            errMessage: 'Username teacher is exit',
         })
     }
-    return res.status(200).json( {
+    return res.status(200).json({
         errCode: 0,
         errMessage: 'Ok',
-        khachhang
-    })
-}
-let handleCreateNewNhaCungCap = async (req, res) => {
-    let nhacungcap = await userServices.createNewNhaCungCap(req.body)
-    let check = await userServices.checkTenNguoiDungNCC(req.body.tenNguoiDung)
-    if(check) {
-        return res.status(200).json( {
-            errCode: 0,
-            errMessage: 'Ten nha cung cap da ton tai',
-        })
-    }
-    return res.status(200).json( {
-        errCode: 0,
-        errMessage: 'Ok',
-        nhacungcap
+        teacher
     })
 }
 
-let handleCheckLoginKH = async (req, res) => {
-    let matKhau = req.body.matKhau
-    let tenNguoiDung = req.body.tenNguoiDung
-    if(!matKhau || !tenNguoiDung) {
-        return res.status(500).json( {
+let handleCreateNewStudent = async (req, res) => {
+    let check = await userServices.checkUsernameStudent(req.body.username)
+    let student = await userServices.createNewStudent(req.body)
+    if (check) {
+        return res.status(200).json({
+            errCode: 0,
+            errMessage: 'Username student is exit',
+        })
+    }
+    return res.status(200).json({
+        errCode: 0,
+        errMessage: 'Ok',
+        student
+    })
+}
+
+let handleCheckLoginTeacher = async (req, res) => {
+    let password = req.body.password
+    let username = req.body.username
+    if (!password || !username) {
+        return res.status(500).json({
             errCode: 1,
             message: 'Missing inputs parameter!'
         })
     }
-    let userData = await userServices.checkLoginKhachHang(tenNguoiDung, matKhau)
-    return res.status(200).json( {
+    let userData = await userServices.checkLoginTeacher(username, password)
+    return res.status(200).json({
         errCode: userData.errCode,
         message: userData.errMessage,
         user: userData.user,
-        token: userData.token
+        // token: userData.token
     })
 }
 
-let handleCheckLoginNCC = async (req, res) => {
-    let matKhau = req.body.matKhau
-    let tenNguoiDung = req.body.tenNguoiDung
-    if(!matKhau || !tenNguoiDung) {
-        return res.status(500).json( {
+let handleCheckLoginStudent = async (req, res) => {
+    let password = req.body.password
+    let username = req.body.username
+    if (!password || !username) {
+        return res.status(500).json({
             errCode: 1,
             message: 'Missing inputs parameter!'
         })
     }
-    let userData = await userServices.checkLoginNhaCungCap(tenNguoiDung, matKhau)
-    return res.status(200).json( {
+    let userData = await userServices.checkLoginStudent(username, password)
+    return res.status(200).json({
         errCode: userData.errCode,
         message: userData.errMessage,
         user: userData.user,
-        token: userData.token
+        // token: userData.token
     })
 }
 
-
-let handleGetKhachHangById = async (req, res, next) => {
-    let id = req.query.khachHangId;
-    let khachhang = await userServices.getKhachHangById(id)
-    if(!id) {
-        return res.status(200).json( {
+let handleGetTeacherByIdTeacher = async (req, res) => {
+    let id = req.query.teacherId;
+    let teacher = await userServices.getTeacherByIdTeacher(id)
+    if (!id) {
+        return res.status(200).json({
             errCode: 1,
             errMessage: 'Missing required parameters',
-            khachhang: []
+            teacher: []
         })
     }
-
-    return res.status(200).json( {
+    return res.status(200).json({
         errCode: 0,
         errMessage: 'Ok',
-        khachhang
+        teacher
     })
 }
 
+let handleUpdateStudent = async (req, res) => {
+    let data = req.body
+    let message = await userServices.updateStudent(data)
+    return res.status(200).json({
+        errMessage: message
+    })
+}
 
-let handleGetNhaCungCapById = async (req, res) => {
-    let id = req.query.NCCId;
-    let khachhang = await userServices.getNhaCungCapById(id)
-    if(!id) {
-        return res.status(200).json( {
+let handleUpdateTeacher = async (req, res) => {
+    let data = req.body
+    let message = await userServices.updateTeacher(data)
+    return res.status(200).json({
+        errMessage: message
+    })
+}
+
+let handleDeleteTeacher = async (req, res) => {
+    if (!req.body.id) {
+        return res.status(200).json({
             errCode: 1,
-            errMessage: 'Missing required parameters',
-            khachhang: []
+            errMessage: "Missing requid parameters"
         })
     }
+    let message = await userServices.deleteTeacher(req.body.id)
+    return res.status(200).json({
+        errMessage: message
+    })
+}
 
-    return res.status(200).json( {
+let handleDeleteStudent = async (req, res) => {
+    if (!req.body.id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: "Missing requid parameters"
+        })
+    }
+    let message = await userServices.deleteStudent(req.body.id)
+    return res.status(200).json({
+        errMessage: message
+    })
+}
+
+let handleGetStudentByIdStudent = async (req, res) => {
+    let id = req.query.StudentId;
+    if (!id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: 'Missing required parameters',
+            teacher: []
+        })
+    }
+    let student = await userServices.getStudentByIdStudent(id);
+    return res.status(200).json({
         errCode: 0,
         errMessage: 'Ok',
-        khachhang
+        student
     })
+
 }
 
 module.exports = {
-    handleCreateNewKhachHang: handleCreateNewKhachHang,
-    handleCreateNewNhaCungCap: handleCreateNewNhaCungCap,
-    handleCheckLoginKH: handleCheckLoginKH,
-    handleCheckLoginNCC: handleCheckLoginNCC,
-    handleGetKhachHangById: handleGetKhachHangById,
-    handleGetNhaCungCapById: handleGetNhaCungCapById,
-    handleCheckToken: handleCheckToken
+    handleCreateNewTeacher: handleCreateNewTeacher,
+    handleCreateNewStudent: handleCreateNewStudent,
+    handleCheckLoginTeacher: handleCheckLoginTeacher,
+    handleCheckLoginStudent: handleCheckLoginStudent,
+    handleGetTeacherByIdTeacher: handleGetTeacherByIdTeacher,
+    handleUpdateStudent: handleUpdateStudent,
+    handleUpdateTeacher: handleUpdateTeacher,
+    handleDeleteTeacher: handleDeleteTeacher,
+    handleDeleteStudent: handleDeleteStudent,
+    handleGetStudentByIdStudent: handleGetStudentByIdStudent,
 }
