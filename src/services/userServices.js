@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { reject, resolve } from 'promise'
-import db from '../models/index'
+import db, { Sequelize } from '../models/index'
 import ratingServices from './ratingServices'
 
 const salt = bcrypt.genSaltSync(10)
@@ -34,7 +34,7 @@ let createNewTeacher = async (data) => {
         })
         resolve(teacher)
 
-    } catch(e) {
+    } catch (e) {
         console.log(e)
     }
 }
@@ -198,8 +198,8 @@ let getTeacherByIdTeacher = (id_Teacher) => {
                 raw: true,
                 nest: true
             })
-            for(let i=0;i<teacher.length;i++){
-                const rs =await ratingServices.selectAVGRatingByTeacherId(teacher[i].id)
+            for (let i = 0; i < teacher.length; i++) {
+                const rs = await ratingServices.selectAVGRatingByTeacherId(teacher[i].id)
                 teacher[i].rating = rs
             }
 
@@ -348,22 +348,22 @@ let getStudentByIdStudent = (id_Student) => {
 let getAllTeacher = async () => {
     try {
         const docs = await db.Teacher.findAll({
-                attributes: ["id",
-                    "username",
-                    "firstName",
-                    "lastName",
-                    "photo",
-                    "phone",
-                    "address",
-                    "experience",
-                    "dregree",
-                    "cetificate",
-                    "createdAt",]
-            },
+            attributes: ["id",
+                "username",
+                "firstName",
+                "lastName",
+                "photo",
+                "phone",
+                "address",
+                "experience",
+                "dregree",
+                "cetificate",
+                "createdAt",]
+        },
         )
 
-        for(let i=0;i<docs.length;i++){
-            const rs =await ratingServices.selectAVGRatingByTeacherId(docs[i].id)
+        for (let i = 0; i < docs.length; i++) {
+            const rs = await ratingServices.selectAVGRatingByTeacherId(docs[i].id)
             docs[i].rating = rs
         }
 
@@ -372,6 +372,21 @@ let getAllTeacher = async () => {
         console.log("Error from services.getAllTeacher", err)
         return []
     }
+}
+
+let searchTeacher = async (nameTeacher) => {
+    let Op = Sequelize.Op;
+    let teacher = await db.Teacher.findAll({
+        where: {
+            lastName: {
+                [Op.like]: nameTeacher
+            },
+            firstName: {
+                [Op.like]: nameTeacher
+            }
+        }
+    })
+    resolve(teacher)
 }
 
 module.exports = {
@@ -388,4 +403,6 @@ module.exports = {
     deleteStudent: deleteStudent,
     getStudentByIdStudent: getStudentByIdStudent,
     getAllTeacher,
+    searchTeacher: searchTeacher,
+
 }
