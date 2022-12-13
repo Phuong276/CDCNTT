@@ -69,7 +69,7 @@ let handleCheckLoginStudent = async (req, res) => {
 }
 
 let handleGetTeacherByIdTeacher = async (req, res) => {
-    let id = req.query.teacherId;
+    let id =Number(req.params.id);
     let teacher = await userServices.getTeacherByIdTeacher(id)
     if (!id) {
         return res.status(200).json({
@@ -128,7 +128,7 @@ let handleDeleteStudent = async (req, res) => {
 }
 
 let handleGetStudentByIdStudent = async (req, res) => {
-    let id = req.query.StudentId;
+    let id = Number(req.params.id);
     if (!id) {
         return res.status(200).json({
             errCode: 1,

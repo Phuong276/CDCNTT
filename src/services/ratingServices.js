@@ -46,8 +46,11 @@ const selectAVGRatingByTeacherId = async (id) => {
             attributes: [
                 [Sequelize.fn('AVG', Sequelize.col('Rating.rating')), 'avgRating'],]
         })
-        console.log(avg[0].avgRating)
-        return avg[0].avgRating
+        let a = 0
+        if(avg[0].avgRating){
+            a = Math.round(avg[0].avgRating*100)/100
+        }
+        return a
     } catch (err) {
         console.log(err.message)
         return 0
